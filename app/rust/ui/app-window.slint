@@ -1,0 +1,202 @@
+import { Button, Slider } from "std-widgets.slint";
+import { MealChip } from "meal-chip.slint";
+export component AppWindow inherits Window {
+    in-out property <int> counter: 42;
+    callback request-increase-value();
+
+    // ── helpers ────────────────────────────────────────────────
+    in property <length> sa-left: root.safe-area-insets.left;
+    in property <length> sa-top: root.safe-area-insets.top;
+    in property <length> sa-right: root.safe-area-insets.right;
+    in property <length> sa-bottom: root.safe-area-insets.bottom;
+    in property <length> safe-w: root.width - sa-left - sa-right;
+
+    // ── background ─────────────────────────────────────────────
+    Rectangle {
+        background: #1e1e2e;
+        width: parent.width;
+        height: parent.height;
+    }
+
+    // ── status-bar overlay ─────────────────────────────────────
+    Rectangle {
+        x: sa-left;
+        y: 0px;
+        width: safe-w;
+        height: 40px;
+        opacity: sa-top > 0 ? 0.0 : 0.0;
+    }
+
+    // ── title bar ──────────────────────────────────────────────
+    Rectangle {
+        x: sa-left;
+        y: sa-top;
+        width: safe-w;
+        height: 64px;
+        background: #1e1e2e;
+
+        Text {
+            x: 16px;
+            y: parent.height / 2 - self.height / 2;
+            text: "Nutrition Tracker";
+            color: #cdd6f4;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        // avatar circle
+        Rectangle {
+            x: parent.width - 44px - 16px;
+            y: parent.height / 2 - 18px;
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            background: #cba6f7;
+
+            Text {
+                x: parent.width / 2 - self.width / 2;
+                y: parent.height / 2 - self.height / 2;
+                text: "👤";
+                font-size: 18px;
+            }
+        }
+    }
+
+    // ── KPI counter card ───────────────────────────────────────
+    Rectangle {
+        x: sa-left + 16px;
+        y: sa-top + 64px + 16px;
+        width: safe-w - 32px;
+        height: 160px;
+        border-radius: 20px;
+        background: @linear-gradient(180deg, #cba6f7 0%, #f5c2e7 100%);
+
+        Text {
+            x: 24px;
+            y: 24px;
+            text: "Calories";
+            color: #585b70;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        Text {
+            x: 24px;
+            y: 36px + 12px;
+            text: root.counter;
+            color: #181825;
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        Text {
+            x: 24px;
+            y: 90px + 8px;
+            text: "goal 2200  ·  remaining " + (2200 - root.counter);
+            color: #585b70;
+            font-size: 13px;
+        }
+
+        // progress bar inside card
+        Rectangle {
+            x: 24px;
+            y: 118px;
+            width: parent.width - 48px;
+            height: 8px;
+            border-radius: 4px;
+            background: #585b70;
+            opacity: 0.35;
+        }
+        Rectangle {
+            x: 24px;
+            y: 118px;
+            width: (parent.width - 48px) * (root.counter / 2200);
+            height: 8px;
+            border-radius: 4px;
+            background: #181825;
+        }
+    }
+
+    // ── section label ──────────────────────────────────────────
+    Text {
+        x: sa-left + 24px;
+        y: sa-top + 267px;
+        text: "Quick Add";
+        color: #a6adc8;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    // ── meal buttons ───────────────────────────────────────────
+    VerticalLayout {
+        x: sa-left;
+        y: sa-top + 291px;
+        width: safe-w;
+        height: parent.height - sa-top - sa-bottom - 291px;
+        spacing: 12px;
+        padding: 16px;
+
+        HorizontalLayout {
+            spacing: 12px;
+            height: 102px;
+
+            MealChip {
+                label: "Breakfast";
+                icon: "🍳";
+                kcal: "+380";
+            }
+            MealChip {
+                label: "Lunch";
+                icon: "🥗";
+                kcal: "+620";
+            }
+        }
+
+        HorizontalLayout {
+            spacing: 12px;
+            height: 102px;
+
+            MealChip {
+                label: "Dinner";
+                icon: "🍝";
+                kcal: "+750";
+            }
+            MealChip {
+                label: "Snack";
+                icon: "🥜";
+                kcal: "+180";
+            }
+        }
+
+        // spacer
+        Rectangle { height: 1px; width: 1px; }
+
+        // ── increase button ─────────────────────────────────────
+        Button {
+            height: 56px;
+            text: "+ Tap to Increase Calorie Count";
+            clicked => {
+                root.request-increase-value();
+            }
+        }
+
+        // ── progress slider ─────────────────────────────────────
+        VerticalLayout {
+            spacing: 8px;
+            padding: 0px;
+
+            Text {
+                text: "Step size";
+                color: #a6adc8;
+                font-size: 12px;
+            }
+
+            Slider {
+                minimum: 10;
+                maximum: 500;
+                value: 10;
+            }
+        }
+    }
+}

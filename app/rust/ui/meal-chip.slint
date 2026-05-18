@@ -1,0 +1,36 @@
+export component MealChip inherits Rectangle {
+    in property <string> label;
+    in property <string> icon;
+    in property <string> kcal;
+
+    border-radius: 16px;
+    background: #313244;
+
+    VerticalLayout {
+        spacing: 0px;
+        padding: 12px;
+
+        Text {
+            text: icon;
+            horizontal-alignment: center;
+            font-size: 30px;
+            color: #cdd6f4;
+        }
+
+        Text {
+            text: label;
+            horizontal-alignment: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #bac2de;
+        }
+
+        Text {
+            text: kcal;
+            horizontal-alignment: center;
+            font-size: 12px;
+            color: #a6e3a1;
+            font-weight: 700;
+        }
+    }
+}
