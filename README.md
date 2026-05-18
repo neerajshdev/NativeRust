@@ -1,5 +1,11 @@
 # NativeRust
 
+## App Screenshot
+
+<img src="app_screenshot.jpg" width="360" alt="App Screenshot">
+
+---
+
 An Android application that uses Rust for native code with Slint-based UI rendering.
 
 ## Overview
@@ -125,5 +131,3 @@ Screen (OpenGL / Vulkan via Slint's backend-android-activity)
 - `AndroidManifest.xml` declares `<activity android.name="android.app.NativeActivity">` with `android.app.lib_name = "rust"`. Android's `NativeActivity` dynamically loads `liblibrust.so` and calls its `android_main` entry point.
 - `src/lib.rs:10` — `android_main` is annotated with `#[unsafe(no_mangle)]` so the JVM can find it. It initialises Slint's Android platform backend, creates `AppWindow`, and runs the event loop.
 - `app/build.gradle.kts:42–46` — The `merge*JniLibFolders` Gradle task depends on `cargoBuild`, ensuring the compiled `.so` is available before the APK is packaged.
-
----
